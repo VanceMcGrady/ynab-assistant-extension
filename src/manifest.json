@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "YNAB AI Assistant",
+  "version": "0.1",
+  "description": "An AI assistant for your YNAB finances.",
+  "permissions": ["storage", "scripting", "identity", "activeTab"],
+  "host_permissions": ["https://app.youneedabudget.com/*"],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {}
+  },
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://app.youneedabudget.com/*"],
+      "js": ["js/contentScript.js"]
+    }
+  ]
+}
