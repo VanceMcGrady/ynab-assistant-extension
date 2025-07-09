@@ -5,8 +5,6 @@ export async function callOpenAI(prompt: string) {
     apiKey: import.meta.env.VITE_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true, // Required for client-side usage
   });
-  console.log("Calling OpenAI with prompt:", prompt);
-  console.log("API Key:", import.meta.env.VITE_OPENAI_API_KEY);
 
   try {
     const chatCompletion = await openai.chat.completions.create({
