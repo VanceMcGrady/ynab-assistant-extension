@@ -1,15 +1,20 @@
 <template>
   <div class="ynab-assistant-container">
     <h1 class="ynab-assistant-header">YNAB AI Assistant</h1>
-    <textarea class="ynab-assistant-textarea" v-model="userQuery" placeholder="Ask something..."></textarea>
-    <button class="ynab-assistant-button" @click="fetchBudgets">Ask</button>
+    <textarea
+      class="ynab-assistant-textarea"
+      v-model="userQuery"
+      placeholder="Ask something..."
+    ></textarea>
+    <button class="ynab-assistant-button" @click="fetchResponse">Ask</button>
     <p v-if="response" class="ynab-assistant-response">{{ response }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { getBudgets } from "@/api/ynabClient";
+
+import { callOpenAI } from "@/api/openaiClient";
 const userQuery = ref("");
 const response = ref("");
 
@@ -18,13 +23,18 @@ async function handleQuery() {
   response.value = `Query: "${userQuery.value}" → (response goes here)`;
 }
 
-async function fetchBudgets() {
-  console.log("Fetching budgets...");
+async function fetchResponse() {
+  if (!userQuery.value.trim()) {
+    response.value = "Please enter a query.";
+    return;
+  }
+
   try {
-    const budgets = await getBudgets();
-    console.log("Fetched budgets:", budgets);
+    const openAIResponse = await callOpenAI(userQuery.value);
+    response.value = openAIResponse;
   } catch (error) {
-    console.error("Error fetching budgets:", error);
+    console.error("Error fetching response from OpenAI:", error);
+    response.value = "Error fetching response. Please try again.";
   }
 }
 </script>
@@ -33,7 +43,8 @@ async function fetchBudgets() {
 .ynab-assistant-container {
   padding: 1rem;
   color: #333;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .ynab-assistant-header {
