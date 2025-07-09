@@ -5,8 +5,11 @@
   "description": "An AI assistant for your YNAB finances.",
   "permissions": ["storage", "scripting", "identity", "activeTab", "sidePanel"],
   "host_permissions": ["https://app.youneedabudget.com/*"],
+  "action": {
+    "default_title": "YNAB AI Assistant"
+  },
   "side_panel": {
-    "default_path": "popup/index.html"
+    "default_path": "sidepanel.html"
   },
   "background": {
     "service_worker": "js/background.js",

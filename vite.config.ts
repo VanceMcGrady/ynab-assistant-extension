@@ -7,16 +7,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        sidepanel: resolve(__dirname, "src/popup/index.html"),
+        sidepanel: resolve(__dirname, "sidepanel.html"),
         background: resolve(__dirname, "src/background.ts"),
         contentScript: resolve(__dirname, "src/content/contentScript.ts"),
       },
       output: {
-        entryFileNames: (chunk) => {
-          if (chunk.name === "background") return "js/background.js";
-          if (chunk.name === "contentScript") return "js/contentScript.js";
-          return "js/[name].js";
-        },
+        entryFileNames: "js/[name].js",
+        chunkFileNames: "js/[name].js",
+        assetFileNames: "assets/[name].[ext]",
       },
     },
     outDir: "dist",
