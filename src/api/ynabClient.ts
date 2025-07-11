@@ -58,13 +58,20 @@ export async function getBudgets(): Promise<any> {
   }
 }
 
-// You can add more YNAB API functions here, e.g.:
-// export async function getBudgetById(budgetId: string): Promise<any> {
-//   try {
-//     const data = await ynabFetch(`/budgets/${budgetId}`);
-//     return data.data.budget;
-//   } catch (error) {
-//     console.error(`Failed to fetch budget ${budgetId}:`, error);
-//     throw error;
-//   }
-// }
+export async function getTransactions(
+  budgetId: string = getBudgets()[0].id
+): Promise<any> {
+  console.log(
+    `Fetching transactions for budget ID: ${budgetId} from YNAB API...`
+  );
+  try {
+    const data = await ynabFetch(`/budgets/${budgetId}/transactions`);
+    return data.data.transactions;
+  } catch (error) {
+    console.error(
+      `Failed to fetch transactions for budget ID ${budgetId}:`,
+      error
+    );
+    throw error;
+  }
+}
