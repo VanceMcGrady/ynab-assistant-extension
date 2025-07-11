@@ -88,3 +88,39 @@ export async function getTransactions(
     throw error;
   }
 }
+
+export async function getCategories(budgetId: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const cacheKey = `categories_${budgetId}`;
+    chrome.storage.local.get(cacheKey, async (result) => {
+      if (result[cacheKey]) {
+        console.log(
+          `Found categories for budget ${budgetId} in local storage:`,
+          result[cacheKey]
+        );
+        resolve(result[cacheKey]);
+      } else {
+        console.log(
+          `Fetching categories for budget ${budgetId} from YNAB API...`
+        );
+        try {
+          const data = await ynabFetch(`/budgets/${budgetId}/categories`);
+          const categories = data.data.category_groups;
+          chrome.storage.local.set({ [cacheKey]: categories }, () => {
+            console.log(
+              `Categories for budget ${budgetId} stored in local storage:`,
+              categories
+            );
+            resolve(categories);
+          });
+        } catch (error) {
+          console.error(
+            `Failed to fetch categories for budget ID ${budgetId}:`,
+            error
+          );
+          reject(error);
+        }
+      }
+    });
+  });
+}
