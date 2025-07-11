@@ -19,7 +19,6 @@ async function ynabFetch(
   options?: RequestInit
 ): Promise<any> {
   const accessToken = await getYnabAccessToken();
-  console.log("Using YNAB access token:", accessToken);
 
   if (!accessToken) {
     throw new Error(
@@ -49,13 +48,27 @@ async function ynabFetch(
 }
 
 export async function getBudgets(): Promise<any> {
-  try {
-    const data = await ynabFetch("/budgets");
-    return data.data.budgets;
-  } catch (error) {
-    console.error("Failed to fetch budgets:", error);
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("budgets", async (result) => {
+      if (result.budgets) {
+        console.log("Found budgets in local storage:", result.budgets);
+        resolve(result.budgets);
+      } else {
+        console.log("Fetching budgets from YNAB API...");
+        try {
+          const data = await ynabFetch("/budgets");
+          const budgets = data.data.budgets;
+          chrome.storage.local.set({ budgets }, () => {
+            console.log("Budgets stored in local storage:", budgets);
+            resolve(budgets);
+          });
+        } catch (error) {
+          console.error("Failed to fetch budgets:", error);
+          reject(error);
+        }
+      }
+    });
+  });
 }
 
 export async function getTransactions(
