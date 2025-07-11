@@ -80,13 +80,11 @@ export async function callOpenAI(prompt: string) {
       const functionName = toolCall.function.name;
       const functionToCall = availableFunctions[functionName];
       const functionArgs = JSON.parse(toolCall.function.arguments);
-
-      let functionResponse;
-      if (functionName === "getBudgets") {
-        functionResponse = await functionToCall();
-      } else {
-        functionResponse = await functionToCall(functionArgs.budgetId);
-      }
+      console.log(
+        `Calling function: ${functionName} with arguments:`,
+        functionArgs
+      );
+      let functionResponse = await functionToCall(functionArgs);
 
       messages.push(responseMessage);
       messages.push({

@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-history">
+  <div class="chat-history" ref="chatHistoryContainer">
     <div v-for="(message, index) in messages" :key="index" class="message">
       <p class="message-content">{{ message.text }}</p>
     </div>
@@ -7,14 +7,28 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, ref, watch, nextTick } from "vue";
 
-defineProps({
+const props = defineProps({
   messages: {
     type: Array as () => Array<{ text: string; type: 'user' | 'bot' }>,
     required: true,
   },
 });
+
+const chatHistoryContainer = ref<HTMLElement | null>(null);
+
+watch(
+  () => props.messages,
+  async () => {
+    await nextTick();
+    if (chatHistoryContainer.value) {
+      chatHistoryContainer.value.scrollTop =
+        chatHistoryContainer.value.scrollHeight;
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
@@ -23,7 +37,7 @@ defineProps({
   overflow-y: auto;
   padding: 1rem;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .message {

@@ -48,6 +48,7 @@ async function ynabFetch(
 }
 
 export async function getBudgets(): Promise<any> {
+  console.log("getBudgets called");
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("budgets", async (result) => {
       if (result.budgets) {
@@ -90,6 +91,7 @@ export async function getTransactions(
 }
 
 export async function getCategories(budgetId: string): Promise<any> {
+  console.log("getCategories called");
   return new Promise((resolve, reject) => {
     const cacheKey = `categories_${budgetId}`;
     chrome.storage.local.get(cacheKey, async (result) => {
