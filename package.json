@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.51.0",
     "openai": "^5.8.3",
     "path": "^0.12.7",
+    "uuid": "^11.1.0",
     "vite-plugin-static-copy": "^3.1.0",
     "vue": "^3.5.17"
   },
