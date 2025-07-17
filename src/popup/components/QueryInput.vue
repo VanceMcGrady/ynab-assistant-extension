@@ -20,8 +20,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+defineProps<{
+  isLoading: boolean;
+}>();
+
 const userQuery = ref("");
-const isLoading = ref(false);
 
 const emit = defineEmits(["ask"]);
 

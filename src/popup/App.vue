@@ -2,7 +2,7 @@
   <div class="ynab-assistant-container">
     <Header />
     <ResponseDisplay :messages="chatHistory" />
-    <QueryInput @ask="handleAsk" />
+    <QueryInput @ask="handleAsk" :is-loading="isLoading" />
   </div>
 </template>
 
@@ -28,7 +28,7 @@ const handleAsk = async (query: string) => {
 
   try {
     const openAIResponse = await callOpenAI(query);
-    console.log("response in App.vue: ", openAIResponse); // For debugging purposes
+    //console.log("response in App.vue: ", openAIResponse);
     chatHistory.value.push({ text: openAIResponse, type: "assistant" });
   } catch (error) {
     console.error("Error fetching response from OpenAI:", error);
