@@ -41,7 +41,7 @@ export const storeMessages = async (
   const messagesWithMetadata = messages.map((message) =>
     addMetadata({ ...message, conversation_id: conversationId })
   );
-
+  // TODO implement storage into conversations table as well
   console.log("messages in storeMessages: ", messagesWithMetadata);
   const { data, error } = await supabase
     .from("messages")
