@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import type { AIMessage } from "./types";
+import type { AIMessage, AIMessageWithMetaData } from "./types";
 import { supabase } from "../supabase/supabase";
 
 export type MessageWithMetadata = AIMessage & {
@@ -13,7 +13,7 @@ export type Data = {
 
 // The `addMetadata` function enriches a message with a unique ID and timestamp.
 // This is crucial for maintaining message order and for database indexing.
-export const addMetadata = (message: AIMessage) => {
+export const addMetadata = (message: AIMessageWithMetaData) => {
   return {
     ...message,
     id: uuidv4(),
