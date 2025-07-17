@@ -11,6 +11,7 @@ export type Data = {
   messages: MessageWithMetadata[];
 };
 
+// for database insertions
 export const addMetadata = (message: AIMessage) => {
   return {
     ...message,
@@ -19,6 +20,7 @@ export const addMetadata = (message: AIMessage) => {
   };
 };
 
+// so openAI doesn't recieve an object with props it doesn't need
 export const removeMetadata = (message: MessageWithMetadata) => {
   const { id, createdAt, ...rest } = message;
   return rest;
@@ -46,11 +48,11 @@ export const storeMessages = async (messages: AIMessage[]) => {
   }
 };
 
-export async function getMessages(conversationId: string) {
+export async function getMessages() {
   const { data, error } = await supabase
     .from("messages")
     .select("*")
-    .eq("conversation_id", conversationId)
+    // .eq("conversation_id", conversationId)
     .order("created_at", { ascending: true });
 
   if (error) {

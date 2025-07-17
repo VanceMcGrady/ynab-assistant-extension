@@ -20,7 +20,7 @@ export async function callOpenAI(prompt: string) {
   };
 
   try {
-    const messageHistory: AIMessage[] = await getMessages("1");
+    const messageHistory: AIMessage[] = await getMessages();
 
     const messages: AIMessage[] = [
       ...messageHistory,
