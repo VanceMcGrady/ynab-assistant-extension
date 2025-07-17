@@ -11,19 +11,14 @@ export type Data = {
   messages: MessageWithMetadata[];
 };
 
-// for database insertions
+// The `addMetadata` function enriches a message with a unique ID and timestamp.
+// This is crucial for maintaining message order and for database indexing.
 export const addMetadata = (message: AIMessage) => {
   return {
     ...message,
     id: uuidv4(),
     createdAt: new Date().toISOString(),
   };
-};
-
-// so openAI doesn't recieve an object with props it doesn't need
-export const removeMetadata = (message: MessageWithMetadata) => {
-  const { id, createdAt, ...rest } = message;
-  return rest;
 };
 
 const defaultData: Data = {
@@ -37,9 +32,20 @@ export const getDb = async () => {
   return db;
 };
 
-export const storeMessages = async (messages: AIMessage[]) => {
-  console.log("messages in storeMessages: ", messages);
-  const { data, error } = await supabase.from("messages").insert([...messages]);
+// The `storeMessages` function now accepts a `conversationId` and uses the `addMetadata`
+// function to ensure all messages are stored with the necessary metadata.
+export const storeMessages = async (
+  messages: AIMessage[],
+  conversationId: string
+) => {
+  const messagesWithMetadata = messages.map((message) =>
+    addMetadata({ ...message, conversation_id: conversationId })
+  );
+
+  console.log("messages in storeMessages: ", messagesWithMetadata);
+  const { data, error } = await supabase
+    .from("messages")
+    .insert(messagesWithMetadata);
   console.log("data in storeMessages: ", data);
   if (error) {
     console.error("Error inserting message:", error);
@@ -48,11 +54,13 @@ export const storeMessages = async (messages: AIMessage[]) => {
   }
 };
 
-export async function getMessages() {
+// The `getMessages` function now fetches messages for a specific `conversationId`,
+// ensuring that only relevant messages are returned.
+export async function getMessages(conversationId: string) {
   const { data, error } = await supabase
     .from("messages")
     .select("*")
-    // .eq("conversation_id", conversationId)
+    .eq("conversation_id", conversationId)
     .order("created_at", { ascending: true });
 
   if (error) {

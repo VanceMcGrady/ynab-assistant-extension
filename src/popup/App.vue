@@ -7,39 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+// This is the main component for the popup.
+// It has been refactored to use the `useChat` composable, which centralizes chat state and logic.
+// This approach simplifies the component's responsibilities to primarily rendering UI elements.
 import Header from "./components/Header.vue";
 import QueryInput from "./components/QueryInput.vue";
 import ResponseDisplay from "./components/ResponseDisplay.vue";
-import { callOpenAI } from "@/api/openAI/openaiClient";
+import { useChat } from "./composables/useChat";
 
-const chatHistory = ref<Array<{ text: string; type: "user" | "assistant" }>>(
-  []
-);
-const isLoading = ref(false);
-
-const handleAsk = async (query: string) => {
-  if (!query.trim()) {
-    return;
-  }
-
-  chatHistory.value.push({ text: query, type: "user" });
-  isLoading.value = true;
-
-  try {
-    const openAIResponse = await callOpenAI(query);
-    //console.log("response in App.vue: ", openAIResponse);
-    chatHistory.value.push({ text: openAIResponse, type: "assistant" });
-  } catch (error) {
-    console.error("Error fetching response from OpenAI:", error);
-    chatHistory.value.push({
-      text: "Error fetching response. Please try again.",
-      type: "assistant",
-    });
-  } finally {
-    isLoading.value = false;
-  }
-};
+const { chatHistory, isLoading, handleAsk } = useChat();
 </script>
 
 <style scoped>

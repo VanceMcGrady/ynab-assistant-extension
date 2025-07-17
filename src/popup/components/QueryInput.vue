@@ -18,6 +18,9 @@
 </template>
 
 <script setup lang="ts">
+// This component is responsible for handling user input and emitting an 'ask' event.
+// It now accepts an `isLoading` prop to control the display of a loader, 
+// centralizing state management in the parent component.
 import { ref } from "vue";
 
 defineProps<{
