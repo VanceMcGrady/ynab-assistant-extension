@@ -33,8 +33,12 @@ export async function callOpenAI(prompt: string) {
       tools: toolsSchema,
       tool_choice: "auto",
     });
-
-    return response;
+    const responseMessage = response.choices[0].message.content;
+    storeMessages([
+      { role: "user", content: prompt },
+      { role: "assistant", content: responseMessage },
+    ]);
+    return responseMessage;
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
     throw error;

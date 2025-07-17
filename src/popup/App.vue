@@ -27,7 +27,7 @@ const handleAsk = async (query: string) => {
   isLoading.value = true;
 
   try {
-    const openAIResponse = (await callOpenAI(query)).choices[0].message.content;
+    const openAIResponse = await callOpenAI(query);
     console.log("response in App.vue: ", openAIResponse); // For debugging purposes
     chatHistory.value.push({ text: openAIResponse, type: "assistant" });
   } catch (error) {
