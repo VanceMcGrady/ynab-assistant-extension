@@ -56,9 +56,15 @@ export function useChat() {
     }
   };
 
+  const startNewChat = () => {
+    chatHistory.value = [];
+    conversationId.value = uuidv4();
+  };
+
   return {
     chatHistory,
     isLoading,
     handleAsk,
+    startNewChat,
   };
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="ynab-assistant-container">
-    <Header />
+    <Header @newChat="startNewChat" />
     <ResponseDisplay :messages="chatHistory" />
     <QueryInput @ask="handleAsk" :is-loading="isLoading" />
   </div>
@@ -15,7 +15,7 @@ import QueryInput from "./components/QueryInput.vue";
 import ResponseDisplay from "./components/ResponseDisplay.vue";
 import { useChat } from "./composables/useChat";
 
-const { chatHistory, isLoading, handleAsk } = useChat();
+const { chatHistory, isLoading, handleAsk, startNewChat } = useChat();
 </script>
 
 <style scoped>
