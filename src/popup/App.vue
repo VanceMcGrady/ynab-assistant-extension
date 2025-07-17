@@ -27,9 +27,9 @@ const handleAsk = async (query: string) => {
   isLoading.value = true;
 
   try {
-    const openAIResponse = await callOpenAI(query);
+    const openAIResponse = (await callOpenAI(query)).choices[0].message.content;
     console.log("response: ", openAIResponse); // For debugging purposes
-    // chatHistory.value.push({ text: openAIResponse, type: "assistant" });
+    chatHistory.value.push({ text: openAIResponse, type: "assistant" });
   } catch (error) {
     console.error("Error fetching response from OpenAI:", error);
     chatHistory.value.push({
