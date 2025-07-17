@@ -11,7 +11,7 @@ import { defineProps, ref, watch, nextTick } from "vue";
 
 const props = defineProps({
   messages: {
-    type: Array as () => Array<{ text: string; type: 'user' | 'bot' }>,
+    type: Array as () => Array<{ text: string; type: "user" | "assistant" }>,
     required: true,
   },
 });

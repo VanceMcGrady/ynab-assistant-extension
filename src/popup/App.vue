@@ -13,7 +13,9 @@ import QueryInput from "./components/QueryInput.vue";
 import ResponseDisplay from "./components/ResponseDisplay.vue";
 import { callOpenAI } from "@/api/openAI/openaiClient";
 
-const chatHistory = ref<Array<{ text: string; type: "user" | "bot" }>>([]);
+const chatHistory = ref<Array<{ text: string; type: "user" | "assistant" }>>(
+  []
+);
 const isLoading = ref(false);
 
 const handleAsk = async (query: string) => {
@@ -26,12 +28,13 @@ const handleAsk = async (query: string) => {
 
   try {
     const openAIResponse = await callOpenAI(query);
-    chatHistory.value.push({ text: openAIResponse, type: "bot" });
+    console.log("response: ", openAIResponse); // For debugging purposes
+    // chatHistory.value.push({ text: openAIResponse, type: "assistant" });
   } catch (error) {
     console.error("Error fetching response from OpenAI:", error);
     chatHistory.value.push({
       text: "Error fetching response. Please try again.",
-      type: "bot",
+      type: "assistant",
     });
   } finally {
     isLoading.value = false;

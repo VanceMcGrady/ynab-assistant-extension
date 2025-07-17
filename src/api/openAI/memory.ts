@@ -36,9 +36,9 @@ export const getDb = async () => {
 };
 
 export const storeMessages = async (messages: AIMessage[]) => {
-  console.log("messages in addMessages: ", messages);
+  console.log("messages in storeMessages: ", messages);
   const { data, error } = await supabase.from("messages").insert([...messages]);
-
+  console.log("data in storeMessages: ", data);
   if (error) {
     console.error("Error inserting message:", error);
   } else {
